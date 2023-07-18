@@ -61,8 +61,10 @@ function App() {
   const [inputValue, setInputValue] = React.useState('')
 
   // 🐨 wrap getItems in a call to `React.useMemo`
-  const allItems = getItems(inputValue)
-  const items = allItems.slice(0, 100)
+  const items = React.useMemo(() => {
+    const allItems = getItems(inputValue)
+    return allItems.slice(0, 100)
+  }, [inputValue])
 
   const {
     selectedItem,
