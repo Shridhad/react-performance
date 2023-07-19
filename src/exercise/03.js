@@ -21,8 +21,8 @@ function Menu({
           getItemProps={getItemProps}
           item={item}
           index={index}
-          selectedItem={selectedItem}
-          highlightedIndex={highlightedIndex}
+          isHighlighted={highlightedIndex === index}
+          isSelected={selectedItem?.id === item.id}
         >
           {item.name}
         </ListItem>
@@ -37,12 +37,11 @@ function ListItem({
   getItemProps,
   item,
   index,
-  selectedItem,
   highlightedIndex,
+  isSelected,
+  isHighlighted,
   ...props
 }) {
-  const isSelected = selectedItem?.id === item.id
-  const isHighlighted = highlightedIndex === index
   return (
     <li
       {...getItemProps({
