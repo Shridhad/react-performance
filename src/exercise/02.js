@@ -3,8 +3,9 @@
 
 import * as React from 'react'
 import {useCombobox} from '../use-combobox'
-import {getItems} from '../filter-cities'
-import {useForceRerender} from '../utils'
+// import {getItems} from '../filter-cities'
+import {getItems} from '../workerized-filter-cities'
+import {useAsync, useForceRerender} from '../utils'
 
 function Menu({
   items,
@@ -61,10 +62,17 @@ function App() {
   const [inputValue, setInputValue] = React.useState('')
 
   // 🐨 wrap getItems in a call to `React.useMemo`
-  const items = React.useMemo(() => {
-    const allItems = getItems(inputValue)
-    return allItems.slice(0, 100)
-  }, [inputValue])
+  // const items = React.useMemo(() => {
+  //   const allItems = getItems(inputValue)
+  //   return allItems.slice(0, 100)
+  // }, [inputValue])
+
+  // With workerized, `getItems` is async, so we need to use `useAsync` hook
+  const {data: allItems, run} = useAsync({data: [], status: 'pending'})
+  React.useEffect(() => {
+    run(getItems(inputValue))
+  }, [inputValue, run])
+  const items = allItems.slice(0, 100)
 
   const {
     selectedItem,
